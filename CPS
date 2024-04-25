@@ -1,0 +1,791 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+#include <math.h>
+
+//function that compares the percentage average to the provinces and the national average using the already calculated parameters
+double q3(double ontario, double quebec, double alberta, double britcol, double canada) 
+{
+    //compares the percentage average for the province and canada and returns an answer if the condition is TRUE
+    if (ontario > canada)   
+    {
+        printf("Ontario has a diabetes percentage greater than the national average\n");
+    }
+    //returns a different answer is the condition is FALSE
+    else    
+    {
+        printf("Ontario has a diabetes percentage less than the national average\n");
+    }
+
+    //compares the percentage average for the province and canada and returns an answer if the condition is TRUE
+    if (quebec > canada)    
+    {
+        printf("Quebec has a diabetes percentage greater than the national average\n");
+    }
+    //returns a different answer is the condition is FALSE
+    else    
+    {
+        printf("Quebec has a diabetes percentage less than the national average\n");
+    }
+
+    //compares the percentage average for the province and canada and returns an answer if the condition is TRUE
+    if (alberta > canada)   
+    {
+        printf("Alberta has a diabetes percentage greater than the national average\n");
+    }
+    //returns a different answer is the condition is FALSE
+    else    
+    {
+        printf("Alberta has a diabetes percentage less than the national average\n");
+    }
+
+    //compares the percentage average for the province and canada and returns an answer if the condition is TRUE
+    if (britcol > canada)   
+    {
+        printf("British Colombia has a diabetes percentage greater than the national average\n");
+    }
+    //returns a different answer is the condition is FALSE
+    else    
+    {
+        printf("British Colombia has a diabetes percentage less than the national average\n");
+    }
+    
+    return 0;
+}
+
+
+int main(void)
+{
+	//full_array is the one array that contains everything in the file the rest of the arrays are the year array, GEO(for the provinces)
+	char full_array[5000], buffer[1024], year[10], GEO[35], a[50], age[50], sex[50], indicator[50], character[20], UOM[30], UOM_ID[30];
+	char scal_fact[10], scal_ID[15], vector[20], coord[20], value[10];
+    char GEOcopy_min[35], yer_min[10], GEOcopy_max[35], yer_max[10];
+
+	//counterON counts the amount of times Ontario appears, counterCA is the counter for Canada
+	int i, counterON = 0, counterQC = 0, counterAL = 0, counterBC = 0, counterCA = 0;
+	
+	//counter15ON is to count the amount of times Ontario appears in 2015, counter20QC is the counter for Quebec in 2020
+	int counter15ON =0, counter16ON = 0, counter17ON = 0, counter18ON = 0, counter19ON = 0, counter20ON =0, counter21ON = 0,
+	counter15QC = 0, counter16QC = 0, counter17QC = 0, counter18QC = 0,  counter19QC = 0,counter20QC =0, counter21QC = 0,
+	counter15AL = 0, counter16AL = 0,counter17AL = 0, counter18AL = 0,  counter19AL = 0, counter20AL =0, counter21AL = 0,
+	counter15BC = 0, counter16BC = 0, counter17BC = 0, counter18BC = 0,  counter19BC = 0, counter20BC =0, counter21BC = 0,
+	counter15CA = 0, counter16CA = 0, counter17CA = 0, counter18CA = 0,  counter19CA = 0, counter20CA =0, counter21CA = 0;
+	
+	//counterAGE1 counts the amount of times ages 35-49 years, AGE2 is for 50-64 and AGE3 is for 65 and above
+	int counterAGE1 = 0, counterAGE2 = 0, counterAGE3 = 0;
+	
+	//percentage is the decimal value for the string value. percent_totON is the total percentage for Ontario
+	//percent_totCA is the total percentage for Canada
+	double percentage = 0.0, percent_totON = 0, percent_totQC = 0, percent_totAL = 0, percent_totBC = 0, percent_totCA =0;
+	
+	//percent_tot15ON is the total percentage for Ontario in 2015
+	double percent_tot15ON, percent_tot16ON = 0, percent_tot17ON = 0, percent_tot18ON, percent_tot19ON = 0, percent_tot20ON =0, percent_tot21ON = 0;
+	double percent_tot15QC, percent_tot16QC, percent_tot17QC = 0, percent_tot18QC, percent_tot19QC = 0, percent_tot20QC =0, percent_tot21QC = 0,
+	percent_tot15AL =0,percent_tot16AL =0, percent_tot17AL = 0, percent_tot18AL, percent_tot19AL = 0, percent_tot20AL =0, percent_tot21AL = 0,
+	percent_tot15BC = 0, percent_tot16BC = 0, percent_tot17BC = 0, percent_tot18BC, percent_tot19BC = 0, percent_tot20BC =0, percent_tot21BC = 0,
+	percent_tot15CA = 0, percent_tot16CA = 0, percent_tot17CA = 0, percent_tot18CA, percent_tot19CA = 0, percent_tot20CA =0, percent_tot21CA = 0;
+	
+	//percent_totAGE1 is the total percentage for people 35-49 years
+	double percent_totAGE1 = 0, percent_totAGE2 = 0, percent_totAGE3;
+	
+	//avON is the average percentage of people who have diabetes in Ontario
+	double avON = 0, avQC = 0, avAL = 0, avBC = 0, avCA = 0; 
+	
+	//av15ON is the avaerage percentage of people who have diabetes in Ontario in 2015
+	double av15ON = 0, av16ON = 0, av17ON = 0, av18ON= 0, av19ON =0, av20ON =0, av21ON = 0;
+	double av15QC =0, av16QC =0,av17QC = 0, av18QC= 0, av19QC =0, av20QC =0, av21QC = 0;
+	 double av15AL = 0,av16AL = 0, av17AL = 0, av18AL= 0, av19AL =0, av20AL =0, av21AL = 0;
+	double av15BC = 0,av16BC = 0, av17BC = 0, av18BC= 0, av19BC =0, av20BC =0, av21BC = 0,
+	 av15CA = 0,av16CA = 0, av17CA = 0, av18CA= 0, av19CA =0, av20CA =0, av21CA = 0;
+	 
+	double avAGE1 = 0, avAGE2 = 0, avAGE3 = 0; // avAGE1 is the average for age 35-49
+	double x, y, z; //these are spare variables
+	double min = 100, max = 0;  //variables for the min and max values
+
+	FILE *in;
+	in = fopen("statscan_diabetes.csv", "r");
+	fgets(buffer, 1024, in); //removes header
+	
+	 while(!feof(in))
+	 {
+		fgets(full_array, 50000, in);
+		
+		//put year into a string
+		int j = 0;
+		for(i = 0; full_array[i] != ','; i++) {
+		year[i] = full_array[i];
+		if (full_array[i] == '"') {
+        continue;
+    } else {
+        year[j] = full_array[i];
+        j++;
+	}
+		year[i] = '\0';
+		
+	}	
+		//put GEO into string
+		 j = 0;
+for(i = i +1; full_array[i] != '\0'; i++) {
+    if (full_array[i] == ',') {
+        break;
+        
+    } else if (full_array[i] == '"') {
+        continue;
+    } else {
+        GEO[j] = full_array[i];
+        j++;
+    }
+}
+GEO[j] = '\0';
+		
+		
+		//put the part we dont need in a random string
+		
+		 j = 0;
+for(i = i +1; full_array[i] != '\0'; i++) {
+    if (full_array[i] == ',') {
+        break;
+    } else {
+        a[j] = full_array[i];
+        j++;
+    }
+}
+a[j] = '\0';
+
+	//put the age into an array
+	
+		 j = 0;
+for(i = i +1; full_array[i] != '\0'; i++) {
+    if (full_array[i] == ',') {
+        break;
+        } else if (full_array[i] == '"') {
+        continue;
+    } else {
+        age[j] = full_array[i];
+        j++;
+    }
+}
+
+age[j] = '\0';
+
+//put the sex into the array
+
+j = 0;
+for(i = i +1; full_array[i] != '\0'; i++) {
+    if (full_array[i] == ',') {
+        break;
+    } else {
+        sex[j] = full_array[i];
+        j++;
+    }
+}
+sex[j] = '\0';
+
+//put indicator into an array
+
+j = 0;
+for(i = i +1; full_array[i] != '\0'; i++) {
+    if (full_array[i] == ',') {
+        break;
+    } else {
+        indicator[j] = full_array[i];
+        j++;
+    }
+}
+indicator[j] = '\0';
+
+//put character into an array
+
+j = 0;
+for(i = i +1; full_array[i] != '\0'; i++) {
+    if (full_array[i] == ',') {
+        break;
+    } else {
+        character[j] = full_array[i];
+        j++;
+    }
+}
+character[j] = '\0';
+
+//put UOM into array
+
+j = 0;
+for(i = i +1; full_array[i] != '\0'; i++) {
+    if (full_array[i] == ',') {
+        break;
+    } else {
+        UOM[j] = full_array[i];
+        j++;
+    }
+}
+UOM[j] = '\0';
+
+//put UOM ID into array
+
+j = 0;
+for(i = i +1; full_array[i] != '\0'; i++) {
+    if (full_array[i] == ',') {
+        break;
+    } else {
+        UOM_ID[j] = full_array[i];
+        j++;
+    }
+}
+UOM_ID[j] = '\0';
+
+//put scalar factor into array
+
+j = 0;
+for(i = i +1; full_array[i] != '\0'; i++) {
+    if (full_array[i] == ',') {
+        break;
+    } else {
+        scal_fact[j] = full_array[i];
+        j++;
+    }
+}
+scal_fact[j] = '\0';
+
+//put scalar ID into array
+
+j = 0;
+for(i = i +1; full_array[i] != '\0'; i++) {
+    if (full_array[i] == ',') {
+        break;
+    } else {
+        scal_ID[j] = full_array[i];
+        j++;
+    }
+}
+scal_ID[j] = '\0';
+
+//put vector into array
+
+j = 0;
+for(i = i +1; full_array[i] != '\0'; i++) {
+    if (full_array[i] == ',') {
+        break;
+    } else {
+        vector[j] = full_array[i];
+        j++;
+    }
+}
+vector[j] = '\0';
+
+//put coordinates into array
+
+j = 0;
+for(i = i +1; full_array[i] != '\0'; i++) {
+    if (full_array[i] == ',') {
+        break;
+    } else {
+        coord[j] = full_array[i];
+        j++;
+    }
+}
+coord[j] = '\0';
+
+//put value into array 
+
+j = 0;
+for(i = i +1; full_array[i] != '\0'; i++) {
+    if (full_array[i] == ',') {
+        break;
+        
+    } else if (full_array[i] == '"') {
+        continue;
+    } else {
+        value[j] = full_array[i];
+        j++;
+    }
+}
+value[j] = '\0';	
+		
+		percentage = atof(value); //put the decimal number of value into percentage
+		
+		
+	//sort through each province and count the amount of times they appear
+		
+		if (strstr(GEO, "Ontario") != NULL) {
+       counterON += 1;
+        percent_totON += percentage; 
+    }
+    if (strstr(GEO, "Quebec") != NULL) {
+        percent_totQC += percentage;
+        counterQC += 1;
+    }
+    if (strstr(GEO, "Alberta") != NULL) {
+        percent_totAL += percentage;
+        counterAL += 1;
+    }
+     if (strstr(GEO, "British Columbia") != NULL) {
+        percent_totBC += percentage;
+        counterBC += 1;
+        x = percentage;  
+    }
+   
+    if (strstr(GEO, "Canada (excluding territories)") != NULL) {
+        percent_totCA += percentage;
+        counterCA += 1;
+    }
+     
+     //sort through each year and count the amount of times each province appears in each year
+     
+if (strstr(year, "2015") != NULL) {
+	if (strstr(GEO, "Ontario") != NULL) {
+        percent_tot15ON += percentage;
+        counter15ON += 1;
+	}
+	else if (strstr(GEO, "Quebec") != NULL) {
+        percent_tot15QC += percentage;
+        counter15QC += 1;
+	}
+	else if (strstr(GEO, "Alberta") != NULL) {
+        percent_tot15AL += percentage;
+        counter15AL += 1;
+	}
+	else if (strstr(GEO, "British Columbia") != NULL) {
+        percent_tot15BC += percentage;
+        counter15BC += 1;
+	}
+	else if (strstr(GEO, "Canada (excluding territories)") != NULL) {
+        percent_tot15CA += percentage;
+        counter15CA += 1;
+	}
+   } 
+   
+   
+  if (strstr(year, "2016") != NULL) {
+      if (strstr(GEO, "Ontario") != NULL) {
+        percent_tot16ON += percentage;
+        counter16ON += 1;
+	}
+	else if (strstr(GEO, "Quebec") != NULL) {
+        percent_tot16QC += percentage;
+        counter16QC += 1;
+	}
+	else if (strstr(GEO, "Alberta") != NULL) {
+        percent_tot16AL += percentage;
+        counter16AL += 1;
+	}
+	else if (strstr(GEO, "British Columbia") != NULL) {
+        percent_tot16BC += percentage;
+        counter16BC += 1;
+	}
+	else if (strstr(GEO, "Canada (excluding territories)") != NULL) {
+        percent_tot16CA += percentage;
+        counter16CA += 1;
+	}
+   } 
+   
+   if (strstr(year, "2017") != NULL) {
+       if (strstr(GEO, "Ontario") != NULL) {
+        percent_tot17ON += percentage;
+        counter17ON += 1;
+	}
+	else if (strstr(GEO, "Quebec") != NULL) {
+        percent_tot17QC += percentage;
+        counter17QC += 1;
+	}
+	else if (strstr(GEO, "Alberta") != NULL) {
+        percent_tot17AL += percentage;
+        counter17AL += 1;
+	}
+	else if (strstr(GEO, "British Columbia") != NULL) {
+        percent_tot17BC += percentage;
+        counter17BC += 1;
+	}
+	else if (strstr(GEO, "Canada (excluding territories)") != NULL) {
+        percent_tot17CA += percentage;
+        counter17CA += 1;
+	}
+   } 
+   
+   if (strstr(year, "2018") != NULL) {
+     if (strstr(GEO, "Ontario") != NULL) {
+        percent_tot18ON += percentage;
+        counter18ON += 1;
+	}
+	else if (strstr(GEO, "Quebec") != NULL) {
+        percent_tot18QC += percentage;
+        counter18QC += 1;
+	}
+	else if (strstr(GEO, "Alberta") != NULL) {
+        percent_tot18AL += percentage;
+        counter18AL += 1;
+	}
+	else if (strstr(GEO, "British Columbia") != NULL) {
+        percent_tot18BC += percentage;
+        counter18BC += 1;
+	}
+	else if (strstr(GEO, "Canada (excluding territories)") != NULL) {
+        percent_tot18CA += percentage;
+        counter18CA += 1;
+	}
+   } 
+   if (strstr(year, "2019") != NULL) {
+      if (strstr(GEO, "Ontario") != NULL) {
+        percent_tot19ON += percentage;
+        counter19ON += 1;
+	}
+	else if (strstr(GEO, "Quebec") != NULL) {
+        percent_tot19QC += percentage;
+        counter19QC += 1;
+	}
+	else if (strstr(GEO, "Alberta") != NULL) {
+        percent_tot19AL += percentage;
+        counter19AL += 1;
+	}
+	else if (strstr(GEO, "British Columbia") != NULL) {
+        percent_tot19BC += percentage;
+        counter19BC += 1;
+	}
+	else if (strstr(GEO, "Canada (excluding territories)") != NULL) {
+        percent_tot19CA += percentage;
+        counter19CA += 1;
+	}
+}
+    if (strstr(year, "2020") != NULL) {
+       if (strstr(GEO, "Ontario") != NULL) {
+        percent_tot20ON += percentage;
+        counter20ON += 1;
+	}
+	else if (strstr(GEO, "Quebec") != NULL) {
+        percent_tot20QC += percentage;
+        counter20QC += 1;
+	}
+	else if (strstr(GEO, "Alberta") != NULL) {
+        percent_tot20AL += percentage;
+        counter20AL += 1;
+	}
+	else if (strstr(GEO, "British Columbia") != NULL) {
+        percent_tot20BC += percentage;
+        counter20BC += 1;
+	}
+	else if (strstr(GEO, "Canada (excluding territories)") != NULL) {
+        percent_tot20CA += percentage;
+        counter20CA += 1;
+	}
+   } 
+   if (strstr(year, "2021") != NULL) {
+        percent_tot21ON += percentage;
+        counter21ON += 1;
+	}
+	else if (strstr(GEO, "Quebec") != NULL) {
+        percent_tot21QC += percentage;
+        counter21QC += 1;
+	}
+	else if (strstr(GEO, "Alberta") != NULL) {
+        percent_tot21AL += percentage;
+        counter21AL += 1;
+	}
+	else if (strstr(GEO, "British Columbia") != NULL) {
+        percent_tot21BC += percentage;
+        counter21BC += 1;
+        y = percentage;
+	}
+	else if (strstr(GEO, "Canada (excluding territories)") != NULL) {
+        percent_tot21CA += percentage;
+        counter21CA += 1;
+	}    
+   
+   //sort through each age and count the amount of times each age appears
+  
+   
+   if (strstr(age, "35 to 49 years") != NULL) {
+        percent_totAGE1 += percentage;
+       counterAGE1 += 1;
+}
+
+if (strstr(age, "50 to 64 years") != NULL) {
+        percent_totAGE2 += percentage;
+       counterAGE2 += 1;
+}
+   if (strstr(age, "65 years and over") != NULL) {
+     // printf("%0.2lf\n", percentage);
+        percent_totAGE3 += percentage;
+       counterAGE3 += 1;
+       z = percentage;
+ }
+
+ //only takes values from provinces and not Canada 
+        if(!(strstr(GEO, "Canada (excluding territories)")))
+        {
+            //while looping if the current value is less than the min
+            if (min > atof(value) && atof(value) != 0)  
+            {
+                for(i=0;i<10;++i)
+                {
+                    //the year of that value will be appended to a new array
+                    yer_min[i] = year[i];   
+                }
+                for(i=0;i<35;++i)
+                {
+                    //the province of that value will be appended to a new array
+                    GEOcopy_min[i] = GEO[i];    
+                }
+                //and the current value we are on will become the new min value new min value
+                min = atof(value);  
+            }
+
+            //while looping if the current value is greater than the max
+            if (max < atof(value))  
+            {
+                for(i=0;i<30;++i)
+                {
+                    //the year of that value will be appended to a new array
+                    yer_max[i] = year[i];   
+                }
+                for(i=0;i<35;++i)
+                {
+                    //the province of that value will be appended to a new array
+                    GEOcopy_max[i] = GEO[i];    
+                }
+                //and the current value we are on will become the new max value new min value
+                max = atof(value);  
+            }
+        }
+}
+ fclose(in);
+ 
+ //calculate the average in each province 
+ percent_totBC = percent_totBC - x; //add this since it reads the last value twice
+ avON = percent_totON / counterON;
+ avQC = percent_totQC / counterQC;
+ avAL = percent_totAL /counterAL;
+ avBC = percent_totBC /(counterBC - 1); //put -1 since it reads the last value of BC twice
+ 
+ //calculate the national average
+ avCA = percent_totCA / counterCA;
+ 
+ //calculate yearly averages
+ av15ON = percent_tot15ON / counter15ON;
+ av15QC = percent_tot15QC / counter15QC;
+ av15AL = percent_tot15AL / counter15AL;
+ av15BC = percent_tot15BC / counter15BC;
+ av15CA = percent_tot15CA / counter15CA;
+ av16ON = percent_tot16ON / counter16ON;
+ av16QC = percent_tot16QC / counter16QC;
+ av16AL = percent_tot16AL / counter16AL;
+ av16BC = percent_tot16BC / counter16BC;
+ av16CA = percent_tot16CA / counter16CA;
+ av17ON = percent_tot17ON / counter17ON;
+ av17QC = percent_tot17QC / counter17QC;
+ av17AL = percent_tot17AL / counter17AL;
+ av17BC = percent_tot17BC / counter17BC;
+ av17CA = percent_tot17CA / counter17CA;
+ av18ON = percent_tot18ON / counter18ON;
+ av18QC = percent_tot18QC / counter18QC;
+ av18AL = percent_tot18AL / counter18AL;
+ av18BC = percent_tot18BC / counter18BC;
+ av18CA = percent_tot18CA / counter18CA;
+ av19ON = percent_tot19ON / counter19ON;
+ av19QC = percent_tot19QC / counter19QC;
+ av19AL = percent_tot19AL / counter19AL;
+ av19BC = percent_tot19BC / counter19BC;
+ av19CA = percent_tot19CA / counter19CA;
+ av20ON = percent_tot20ON / counter20ON;
+ av20QC = percent_tot20QC / counter20QC;
+ av20AL = percent_tot20AL / counter20AL;
+ av20BC = percent_tot20BC / counter20BC;
+ av20CA = percent_tot20CA / counter20CA;
+ av21ON = percent_tot21ON / counter21ON;
+ av21QC = percent_tot21QC / counter21QC;
+ av21AL = percent_tot21AL / counter21AL;
+ av21CA = percent_tot21CA / counter21CA;
+ percent_tot21BC = percent_tot21BC - y; //add this since it reads the last value twice
+ av21BC = percent_tot21BC / (counter21BC - 1);
+ 
+FILE *data_file;
+
+// save data for Ontario
+data_file = fopen("dataON.dat", "w");
+fprintf(data_file, "1 %lf\n", av15ON);
+fprintf(data_file, "2 %lf\n", av16ON);
+fprintf(data_file, "3 %lf\n", av17ON);
+fprintf(data_file, "4 %lf\n", av18ON);
+fprintf(data_file, "5 %lf\n", av19ON);
+fprintf(data_file, "6 %lf\n", av20ON);
+fprintf(data_file, "7 %lf\n", av21ON);
+fclose(data_file);
+
+// save data for Quebec
+data_file = fopen("dataQC.dat", "w");
+fprintf(data_file, "1 %lf\n", av15QC);
+fprintf(data_file, "2 %lf\n", av16QC);
+fprintf(data_file, "3 %lf\n", av17QC);
+fprintf(data_file, "4 %lf\n", av18QC);
+fprintf(data_file, "5 %lf\n", av19QC);
+fprintf(data_file, "6 %lf\n", av20QC);
+fprintf(data_file, "7 %lf\n", av21QC);
+fclose(data_file);
+
+// save data for Alberta
+data_file = fopen("dataAL.dat", "w");
+fprintf(data_file, "1 %lf\n", av15AL);
+fprintf(data_file, "2 %lf\n", av16AL);
+fprintf(data_file, "3 %lf\n", av17AL);
+fprintf(data_file, "4 %lf\n", av18AL);
+fprintf(data_file, "5 %lf\n", av19AL);
+fprintf(data_file, "6 %lf\n", av20AL);
+fprintf(data_file, "7 %lf\n", av21AL);
+fclose(data_file);
+
+// save data for British Columbia
+data_file = fopen("dataBC.dat", "w");
+fprintf(data_file, "1 %lf\n", av15BC);
+fprintf(data_file, "2 %lf\n", av16BC);
+fprintf(data_file, "3 %lf\n", av17BC);
+fprintf(data_file, "4 %lf\n", av18BC);
+fprintf(data_file, "5 %lf\n", av19BC);
+fprintf(data_file, "6 %lf\n", av20BC);
+fprintf(data_file, "7 %lf\n", av21BC);
+fclose(data_file);
+
+// save data for Canada excluding territories
+data_file = fopen("dataCA.dat", "w");
+fprintf(data_file, "1 %lf\n", av15CA);
+fprintf(data_file, "2 %lf\n", av16CA);
+fprintf(data_file, "3 %lf\n", av17CA);
+fprintf(data_file, "4 %lf\n", av18CA);
+fprintf(data_file, "5 %lf\n", av19CA);
+fprintf(data_file, "6 %lf\n", av20CA);
+fprintf(data_file, "7 %lf\n", av21CA);
+fclose(data_file);
+
+ //calculate age averages
+ avAGE1 = percent_totAGE1 / counterAGE1;
+ avAGE2 = percent_totAGE2 / counterAGE2;
+ percent_totAGE3 = percent_totAGE3 - z;
+ avAGE3 = percent_totAGE3 / (counterAGE3 - 1); //add this since it reads the last value twice
+ 
+ //determine which province has the lowest average
+ if(avON <= avQC && avON <= avAL && avON <= avBC){
+	   printf("Ontario has the lowest percentage of diabetes. \n");
+   } 
+   else if(avQC <= avON && avQC <= avAL && avQC <= avBC){
+	   printf("Quebec has the lowest percentage of diabetes. \n");
+   }
+   else if(avAL <= avON && avAL <= avQC && avAL <= avBC){
+	   printf("Alberta has the lowest percentage of diabetes. \n");
+   }
+   else if(avBC <= avON && avBC <= avQC && avBC <= avAL){
+	   printf("British Columbia has the lowest percentage of diabetes. \n");
+   }
+   
+   //determine which province has the highest average
+    if(avON >= avQC && avON >= avAL && avON >= avBC){
+	  printf("Ontario has the highest percentage of diabetes. \n");
+   } 
+   else if(avQC >= avON && avQC >= avAL && avQC >= avBC){
+	   printf("Quebec has the highest percentage of diabetes. \n");
+   }
+   else if(avAL >= avON && avAL >= avQC && avAL >= avBC){
+	   printf("Alberta has the highest percentage of diabetes. \n");
+   }
+   else if(avBC >= avON && avBC >= avQC && avBC >= avAL){
+	   printf("British Columbia has the highest percentage of diabetes. \n");
+   }
+   
+ 
+ //printf("\n total sum: %lf \n", percent_totAGE3);
+ //printf("Value for ca: %d, \n", counterAGE3);
+ 
+  
+ //print the results 
+	printf("The average amount of people with diabetes in Ontario is: %0.2lf percent \n", avON);
+	printf("The average amount of people with diabetes in Quebec is: %0.2lf percent \n", avQC);
+	printf("The average amount of people with diabetes in Alberta is: %0.2lf percent \n", avAL);
+	printf("The average amount of people with diabetes in British Columbia is: %0.2lf percent\n", avBC);
+	printf("The average amount of people with diabetes in Canada is: %0.2lf percent \n", avCA);
+	printf("The average amount of people with diabetes in 2015 was: \n%0.2lf percent in Ontario \n%0.2lf percent in Quebec \n", av15ON, av15QC);
+	printf("%0.2lf percent in Alberta \n%0.2lf percent in British Columbia \n%0.2lf percent in Canada \n ", av15AL, av15BC, av15CA);
+	printf("The average amount of people with diabetes in 2016 was: \n %0.2lf percent in Ontario \n%0.2lf percent in Quebec\n", av16ON, av16QC);
+	printf("%0.2lf percent in Alberta \n%0.2lf percent in British Columbia \n%0.2lf percent in Canada\n ", av16AL, av16BC, av16CA);
+	printf("The average amount of people with diabetes in 2017 was: \n %0.2lf percent in Ontario \n%0.2lf percent in Quebec\n", av17ON, av17QC);
+	printf("%0.2lf percent in Alberta \n%0.2lf percent in British Columbia \n%0.2lf percent in Canada\n ", av17AL, av17BC, av17CA);
+	printf("The average amount of people with diabetes in 2018 was: \n %0.2lf percent in Ontario \n%0.2lf percent in Quebec\n", av18ON, av18QC);
+	printf("%0.2lf percent in Alberta \n%0.2lf percent in British Columbia \n%0.2lf percent in Canada\n ", av18AL, av18BC, av18CA);
+	printf("The average amount of people with diabetes in 2019 was: \n %0.2lf percent in Ontario \n%0.2lf percent in Quebec\n", av19ON, av19QC);
+	printf("%0.2lf percent in Alberta \n%0.2lf percent in British Columbia \n%0.2lf percent in Canada\n ", av19AL, av19BC, av19CA);
+	printf("The average amount of people with diabetes in 2020 was: \n %0.2lf percent in Ontario \n%0.2lf percent in Quebec\n", av20ON, av20QC);
+	printf("%0.2lf percent in Alberta \n%0.2lf percent in British Columbia \n%0.2lf percent in Canada\n ", av20AL, av20BC, av20CA);
+	printf("The average amount of people with diabetes in 2021 was: \n %0.2lf percent in Ontario \n%0.2lf percent in Quebec\n", av21ON, av21QC);
+	printf("%0.2lf percent in Alberta \n%0.2lf percent in British Columbia \n%0.2lf percent in Canada\n ", av21AL, av21BC, av21CA);
+	printf("The average amount of people with diabetes between 35-49 years is: %0.2lf percent \n", avAGE1);
+	printf("The average amount of people with diabetes between 50-64 years is: %0.2lf percent \n", avAGE2);
+	printf("The average amount of people with diabetes between 65 years and over is: %0.2lf percent \n", avAGE3);
+
+     q3(avON, avQC, avAL, avBC, avCA);   //calls the function used to answer question 3
+
+    //prints the answer to question 4
+    //the arrays for the year and province containing the maximum values are printed
+    printf("%s had the highest percentage of diabetes in the year %s\n", GEOcopy_max, yer_max);      
+    //the arrays for the year and province containing the minimum values are printed
+    printf("%s had the lowest percentage of diabetes in the year %s\n", GEOcopy_min, yer_min);    
+ // save total averages temporary data files for GNUplot	
+//	printf(" Trash: %s %s %s %s %s %s %s %s %s %s", a, sex, indicator, character, UOM, UOM_ID, scal_fact, scal_ID, vector, coord);
+
+   // save age averages temporary data file for GNUplot
+    FILE *tmp_file = fopen("tmp.dat", "w");
+    fprintf(tmp_file, "1 %lf\n", avAGE1);
+    fprintf(tmp_file, "2 %lf\n", avAGE2);
+    fprintf(tmp_file, "3 %lf\n", avAGE3);
+    fclose(tmp_file);
+    
+    // create the first plot command string
+    char plot_command1[200];
+    sprintf(plot_command1, "gnuplot -persist -e \"\
+        set title 'Canadian Diabetic Average Percentage Amoung Age Groups(NO Territories)' font ',7';  \
+        set xlabel 'Age Group'; \
+        set ylabel 'Percentage'; \
+        set key outside; \
+         set xtics ('35 to 49 ' 1, '50 to 64 ' 2, '65 +' 3); \
+        set boxwidth 0.5; \
+        set style fill solid; \
+        set output 'age_percentages.png'; \
+        plot 'tmp.dat' using 1:2 with boxes lc rgb '#8FBCE6' title 'Diabetes averages'; \
+        \"");
+        
+        // create the second plot command string
+    char plot_command2[300];
+    sprintf(plot_command2, "gnuplot -persist -e \"\
+        set title 'Diabetes Percentages in Canada by Province (2015-2021)' font ',7'; \
+        set xlabel 'Year'; \
+        set ylabel 'Percentage'; \
+        set key outside; \
+        set xtics ('2015' 1, '2016' 2, '2017' 3, '2018' 4, '2019' 5, '2020' 6, '2021' 7); \
+        set style data linespoints; \
+        set output 'diabetes_percentages.png'; \
+        plot \
+        'dataON.dat' using 1:2 with linespoints title 'Ontario', \
+        'dataQC.dat' using 1:2 with linespoints title 'Quebec', \
+        'dataAL.dat' using 1:2 with linespoints title 'Alberta', \
+        'dataBC.dat' using 1:2 with linespoints title 'British Columbia', \
+        'dataCA.dat' using 1:2 with linespoints title 'Canada excluding territories'; \
+        \"");
+
+     // open pipe to GNUplot for plot1
+     FILE *gnuplot_pipe1 = popen(plot_command1, "w");
+
+    // close pipe1
+    pclose(gnuplot_pipe1);
+
+    printf("Plot 1 saved to age_percentages.png\n");
+
+   // wait 5 seconds before running plot2
+   sleep(5);
+
+    // open  pipe to GNUplot for plot2
+    FILE *gnuplot_pipe2 = popen(plot_command2, "w");
+
+    // close 2
+    pclose(gnuplot_pipe2);
+
+    printf("Plot 2 saved to prov_percentages.png\n");
+    
+ 
+
+	return (0);
+}
